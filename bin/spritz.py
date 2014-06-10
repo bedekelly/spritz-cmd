@@ -1,13 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys
 import fileinput
 import time
 import math
 
-def ORP(n):
+
+def ORP(word_length):
     percentage = 0.45
-    return int(math.ceil(n * 0.45))
+    return int(math.ceil(word_length * 0.45))
+
 
 def calculate_spaces(word, maxLength):
     maxOrp = ORP(maxLength) # index + 1
@@ -17,9 +19,11 @@ def calculate_spaces(word, maxLength):
     
     return (orp, prefixSpace, postfixSpace)
 
+
 def find_max(reading):
-    reading = sorted(reading, key=lambda x: len(x), reverse=True)
+    reading = sorted(reading, key=len, reverse=True)
     return len(reading[0])
+
 
 def parse_article(article):
     """
@@ -39,6 +43,7 @@ def parse_article(article):
 
     return article.split()
 
+
 def print_word(word, orpConfig):
     def insert_color(word, orpIndex):
         colorCode_red = "\033[91m"
@@ -51,6 +56,7 @@ def print_word(word, orpConfig):
 
     print ("\r%s" % stringToPrint, end='')
     sys.stdout.flush()
+
 
 def spritz(wpm, reading):
     """
@@ -71,6 +77,7 @@ def spritz(wpm, reading):
         orpConfig = calculate_spaces(word, maxLength)
         print_word(word, orpConfig)
 
+
 def main(wpm, article):
     """
     Main function
@@ -78,11 +85,12 @@ def main(wpm, article):
     reading = parse_article(article)
     spritz(wpm, reading)
 
+
 if __name__ == '__main__':
-    if len(sys.argv) >= 2 and sys.argv[1]:
+    if len(sys.argv) >= 2:
         try:
             wpm = int(sys.argv[1])
-        except:
+        except ValueError:
             print ("<wpm> need to be an integer")
             exit(1)
     else:
